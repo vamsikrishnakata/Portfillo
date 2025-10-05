@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vamsi Krishna Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <style>
+    /* Base */
+    * { margin:0; padding:0; box-sizing:border-box; scroll-behavior:smooth; }
+    body { font-family:'Roboto', sans-serif; background:#f9f9f9; color:#333; transition: background 0.3s, color 0.3s; }
+    body.dark { background:#121212; color:#e0e0e0; }
+
+    /* Navbar (from Code 1) */
+    nav{
+      position:sticky;
+      top:0;
+      z-index:100;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      background:#49a1e9;
+      color:#fff;
+      padding:15px 30px;
+    }
+    nav h1{ font-size:1.5rem }
+    nav ul{ list-style:none; display:flex; gap:20px }
+    nav ul li a{ color:#fff; text-decoration:none; font-weight:500; transition:.3s }
+    nav ul li a:hover{ color:#ffd700 }
+    .toggle-dark{ cursor:pointer; }
+
+    /* Hero */
+    header {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height:95vh;
+      background: url('vamsi1.jpg') no-repeat center center/cover;
+      color:#f6f4f4;
+    }
+    .hero-container { display:flex; align-items:center; gap:30px; max-width:1000px; padding:20px; }
+    .hero-left img { width:250px; height:250px; border-radius:50%; border:4px solid #e0eaf0; object-fit:cover; }
+    .hero-right { display:flex; flex-direction:column; font-family:'Poppins', sans-serif; }
+    .hero-hi, .hero-name {font-family: 'Lora', serif;}
+    .hero-name {font-family: 'Lora', serif;font-size: 4rem;margin: 5px 0 0;font-weight: 700;}
+    /* Sections */
+    section { max-width:900px; margin:80px auto; padding:0 20px; opacity:0; transform:translateY(20px); transition: all 0.8s ease-out; }
+    section.show { opacity:1; transform:translateY(0); }
+    h2 { text-align:center; margin-bottom:40px; color:#1e90ff; font-size:2rem; position:relative; font-family:'Poppins', sans-serif; }
+    h2::after { content:''; width:60px; height:3px; background:#1e90ff; display:block; margin:10px auto 0; border-radius:2px; }
+
+    /* About */
+    .about p { text-align:center; font-size:1.1rem; line-height:1.8; }
+    .about-card {
+      background: #f0f4ff;
+      padding: 25px 20px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      transition: transform 0.3s;
+    }
+    .about-card:hover { transform: translateY(-5px); }
+    .highlight { color: #1e90ff; font-weight: 600; }
+    body.dark .about-card { background: #1a1a1a; color: #e0e0e0; }
+    body.dark .highlight { color: #4da6ff; }
+
+    /* Skills Section - Enhanced Flip Cards */
+    .skills-container { display:flex; flex-wrap:wrap; gap:20px; justify-content:center; }
+    .skill-card { width:150px; height:150px; perspective:1200px; transition: transform 0.3s; }
+    .skill-card:hover { transform: scale(1.05); }
+    .skill-inner {
+      position:relative;
+      width:100%;
+      height:100%;
+      text-align:center;
+      transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
+      transform-style: preserve-3d;
+      cursor:pointer;
+    }
+    .skill-card:hover .skill-inner { transform: rotateY(180deg); }
+
+    .skill-front, .skill-back {
+      position:absolute;
+      width:100%;
+      height:100%;
+      backface-visibility:hidden;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      border-radius:15px;
+      box-shadow:0 10px 20px rgba(0,0,0,0.2);
+      font-weight:bold;
+      font-size:1.1rem;
+      padding:10px;
+      transition: background 0.3s, color 0.3s;
+    }
+    .skill-front { background:#303639; color:#fff; }
+    .skill-front img { width:50px; height:50px; margin-bottom:10px; transition: transform 0.3s; }
+    .skill-card:hover .skill-front img { transform: scale(1.1); }
+    .skill-back { background:#ffd700; color:#333; transform: rotateY(180deg); font-size:1rem; }
+
+    /* Projects */
+    .projects { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:25px; }
+    .project { perspective:1000px; }
+    .project-inner { background:#fff; padding:50px; border-radius:10px; box-shadow:0 8px 15px rgba(0,0,0,0.1); transition:transform 0.4s; cursor:pointer; }
+    .project-inner:hover { transform:rotateY(10deg) rotateX(5deg); }
+    .project h3 { color:#1e90ff; margin-bottom:10px; }
+    .project p { margin-bottom:8px; }
+    body.dark .project-inner { background:#1a1a1a; color:#e0e0e0; }
+
+    /* Certificates */
+    .certificates-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap:70px; justify-items:center; }
+    .certificate-card { background:#52a4f7; color:#fff; padding:20px; border-radius:10px; text-align:center; box-shadow:0 8px 15px rgba(0,0,0,0.1); transition:transform 0.3s, box-shadow 0.3s; min-width:250px; }
+    .certificate-card:hover { transform:translateY(-5px); box-shadow:0 12px 20px rgba(0,0,0,0.2); }
+    body.dark .certificate-card { background:#1a1a1a; color:#e0e0e0; }
+
+    /* Contact Section (from Code 2) */
+    /* Contact Section - Horizontal Line */
+    .contact-cards {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: nowrap; /* Prevent wrapping */
+      margin-top: 30px;
+      overflow-x: auto; /* Scrollbar if needed */
+      padding-bottom: 10px;
+    }
+
+    .contact-cards::-webkit-scrollbar { height: 6px; }
+    .contact-cards::-webkit-scrollbar-thumb { background: #1e90ff; border-radius: 3px; }
+    .contact-cards::-webkit-scrollbar-track { background: transparent; }
+
+    .contact-card {
+      background:#f0f4ff;
+      border-radius:20px;
+      width:220px;
+      padding:30px 20px;
+      text-align:center;
+      cursor:pointer;
+      transition: transform 0.4s, box-shadow 0.4s, background 0.3s;
+      text-decoration:none;
+      color:#333;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:15px;
+    }
+
+    .contact-card .icon-circle {
+      width:70px;
+      height:70px;
+      background:#1e90ff;
+      border-radius:50%;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      color:#fff;
+      font-size:2rem;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .contact-card h3 {
+      font-size:1.2rem;
+      margin:0;
+      color:#0077b6;
+    }
+
+    .contact-card p {
+      font-size:0.95rem;
+      word-break:break-word;
+      color:#333;
+    }
+
+    .contact-card:hover {
+      transform:translateY(-8px);
+      box-shadow:0 15px 25px rgba(0,0,0,0.2);
+    }
+
+    .contact-card:hover .icon-circle {
+      background:#ffbf00;
+      transform:scale(1.2);
+    }
+
+    body.dark .contact-card { background:#1a1a1a; color:#e0e0e0; }
+    body.dark .contact-card h3 { color:#4da6ff; }
+    body.dark .contact-card .icon-circle { background:#4da6ff; color:#fff; }
+
+    /* Responsive */
+    @media(max-width:768px){
+      header { height:auto; padding:40px 20px; }
+      .hero-container { flex-direction:column; text-align:center; gap:20px; }
+      .hero-right { align-items:center; }
+      .hero-hi, .hero-name { text-align:center; }
+      nav ul { flex-direction:column; gap:10px; margin-top:10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <h1>Portfolio</h1>
+    <ul>
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#certificates">Certificates</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <span class="toggle-dark"><i class="fas fa-moon"></i></span>
+  </nav>
+
+  <!-- Hero Section -->
+  <header>
+    <div class="hero-container">
+    <!--<div class="hero-left">
+        <img src="vamsi.jpg.jpg" alt="Profile Picture">
+      </div>-->
+      <div class="hero-right">
+        <h1 class="hero-hi">Hi</h1>
+        <h1 class="hero-name">I'm Vamsi Krishna</h1>
+      </div>
+    </div>
+  </header>
+
+  <!-- About Me -->
+  <section id="about" class="about">
+    <h2>About Me</h2>
+    <div class="about-card">
+      <p>
+        Motivated <span class="highlight">B.Sc. Computer Science graduate</span> eager to apply my skills in 
+        <span class="highlight">Python</span>, <span class="highlight">Django</span>, <span class="highlight">MySQL</span>, 
+        <span class="highlight">HTML</span>, <span class="highlight">CSS</span>, and <span class="highlight">RESTful APIs</span> 
+        to contribute to innovative software projects and grow as a professional in the IT industry. 
+        Passionate about learning new technologies, solving real-world problems, and delivering 
+        efficient, high-quality software solutions.
+      </p>
+    </div>
+  </section>
+
+  <!-- Skills Section (with logos) -->
+  <section id="skills">
+    <h2>Skills</h2>
+    <div class="skills-container">
+      <div class="skill-card">
+        <div class="skill-inner">
+          <div class="skill-front"><img src="https://img.icons8.com/color/48/python--v1.png" alt="Python">Python</div>
+          <div class="skill-back">Advanced</div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-inner">
+          <div class="skill-front"><img src="https://img.icons8.com/color/48/django.png" alt="Django">Django</div>
+          <div class="skill-back">Intermediate</div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-inner">
+          <div class="skill-front"><img src="https://img.icons8.com/color/48/mysql-logo.png" alt="MySQL">MySQL</div>
+          <div class="skill-back">Intermediate</div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-inner">
+          <div class="skill-front"><img src="https://img.icons8.com/color/48/html-5--v1.png" alt="HTML">HTML</div>
+          <div class="skill-back">Advanced</div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-inner">
+          <div class="skill-front"><img src="https://img.icons8.com/color/48/css3.png" alt="CSS">CSS</div>
+          <div class="skill-back">Advanced</div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-inner">
+          <div class="skill-front"><img src="https://img.icons8.com/color/48/api-settings.png" alt="REST API">REST API</div>
+          <div class="skill-back">CRUD Ops</div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-inner">
+          <div class="skill-front"><img src="https://img.icons8.com/color/48/github--v1.png" alt="GitHub">GitHub</div>
+          <div class="skill-back">Projects</div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-inner">
+          <div class="skill-front"><img src="https://img.icons8.com/color/48/microsoft-excel-2019.png" alt="Excel">MS Excel</div>
+          <div class="skill-back">Basic</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- Projects Section -->
+  <section id="projects" class="projects">
+    <h2>Projects</h2>
+
+    <div class="project">
+      <div class="project-inner">
+        <h3>Voice Assistant</h3>
+        <p>
+           <li>Developed a web-based voice assistant using Python, Django with text and speech interaction. For user-friendly inteface using HTML, CSS, Javascript.</li>
+        </p>
+        <p>
+          <li>Implemented features: current time & date, jokes , opening websites, battery status and word meanings.</li>
+        </p>
+        <p>
+           <li>Integrated external APIs for real-time weather and dictionary information.</li>
+        </p>
+        <p>
+          <strong>Technologies:</strong>Python, Django, HTML, CSS, JavaScript, APIs.
+        </p>
+        <p>
+          🔗 <a href="https://github.com/vamsikrishnakata/voice_assistant" target="_blank" style="color:#1e90ff; text-decoration:none; font-weight:600;">View Project</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-inner">
+        <h3>Real-Time Weather Dashboard</h3>
+        <p>
+          <li>Developed a dynamic web application to display real-time weather updates for cities worldwide.</li>
+        </p>
+        <p> 
+          <li>Integrated the OpenWeatherMap API to fetch accurate temperature, humidity, wind speed, and cloud types.</li>
+        </p>
+        <p>
+          <li>Designed a responsive user interface using HTML and CSS and implemented MySQL database to store and manage user search history with options to view and delete records.</li>
+        </p>
+        <p>
+          <strong>Technologies:</strong> Python, HTML, CSS, MySQL, OpenWeatherMap API</p>
+        <p>
+          🔗 <a href="https://github.com/vamsikrishnakata/Real-Time-Weather-Dashboard" target="_blank" style="color:#1e90ff; text-decoration:none; font-weight:600;">View Project</a>
+        </p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Certificates Section -->
+  <section id="certificates" class="certificates">
+    <h2>Certificates</h2>
+    <div class="certificates-grid">
+      <div class="certificate-card">Web Development Internship – Cornerstone IT Solutions</div>
+      <div class="certificate-card">Python Full Stack – VCube Software Solutions</div>
+      <div class="certificate-card">Python (Basic) – HackerRank</div>
+      <div class="certificate-card">Soft Skills – TCS ION</div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <!-- Contact Section (Horizontal Line) -->
+  <section id="contact" class="contact">
+    <h2>Contact Me</h2>
+    <div class="contact-cards">
+      <div class="contact-card contact-email" onclick="copyEmail()">
+        <div class="icon-circle"><i class="fas fa-envelope"></i></div>
+        <h3>Email</h3>
+        <p>vamsikrishnakata1@gmail.com</p>
+      </div>
+      <div class="contact-card contact-phone">
+        <div class="icon-circle"><i class="fas fa-phone"></i></div>
+        <h3>Mobile</h3>
+        <p>+91 9100484870</p>
+      </div>
+      <a href="https://www.linkedin.com/in/vamsi-krishna-kata-4393b1288" target="_blank" class="contact-card contact-linkedin">
+        <div class="icon-circle"><i class="fab fa-linkedin"></i></div>
+        <h3>LinkedIn</h3>
+        <p>linkedin.com/in/vamsi-krishna-kata-4393b1288</p>
+      </a>
+      <a href="https://github.com/vamsikrishnakata" target="_blank" class="contact-card contact-github">
+        <div class="icon-circle"><i class="fab fa-github"></i></div>
+        <h3>GitHub</h3>
+        <p>github.com/KataVamsikrishna</p>
+      </a>
+    </div>
+  </section>
+
+  <footer style="text-align:center;padding:20px;background:#0077b6;color:#fff;margin-top:40px">
+    <p>© 2025 Vamsi Krishna | All Rights Reserved</p>
+  </footer>
+
+  <script>
+    // Dark Mode Toggle
+    const toggle=document.querySelector('.toggle-dark');
+    toggle.addEventListener('click',()=>document.body.classList.toggle('dark'));
+
+    // Scroll reveal
+    const sections=document.querySelectorAll('section');
+    const revealSection=()=>{ sections.forEach(sec=>{ const top=sec.getBoundingClientRect().top; const trigger=window.innerHeight-100; if(top<trigger){sec.classList.add('show');} }); }
+    window.addEventListener('scroll',revealSection);
+    window.addEventListener('load',()=>{ revealSection(); });
+
+    // Copy Email
+    function copyEmail(){
+      navigator.clipboard.writeText('vamsikrishnakata1@gmail.com').then(()=>{ alert('Email copied to clipboard!'); });
+    }
+  </script>
+
+</body>
+</html>
